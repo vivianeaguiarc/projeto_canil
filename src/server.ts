@@ -1,31 +1,25 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import musrtache from 'mustache-express';
-import path from 'path';
-import mainRoutes from './routes/index';
+import express from "express";
+import dotenv from "dotenv";
+import mustache from "mustache-express";
+import path from "path";
 
-// Configura as variáveis de ambiente
+import mainRoutes from "./routes/index";
+
 dotenv.config();
 
-// Cria uma instância do servidor Express
 const server = express();
 
-// Configura o servidor para usar Mustache como mecanismo de template
-server.set('view engine', 'mustache');
-server.set('views', path.join(__dirname, 'views'));
-server.engine('mustache', musrtache());
+server.set("view engine", "mustache");
+server.set("views", path.join(__dirname, "views"));
+server.engine("mustache", mustache());
 
-// Configura o servidor para servir arquivos estáticos da pasta "public"
-server.use(express.static(path.join(__dirname, 'public')));
+server.use(express.static(path.join(__dirname, "../public")));
 
-// Rota para a página inicial
 server.use(mainRoutes);
-
 server.use((req, res) => {
-  res.send("Ops! Página não encontrada.");
-})
+  res.render("pages/404");
+});
 
-// Inicia o servidor na porta definida no arquivo .env
-server.listen(process.env.PORT, () => {
-  console.log(`Servidor rodando na porta ${process.env.PORT}`);
+server.listen(process.env.PORT || 3000, () => {
+  console.log(`Servidor rodando na porta ${process.env.PORT || 3000}`);
 });
